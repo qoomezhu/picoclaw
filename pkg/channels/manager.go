@@ -176,6 +176,19 @@ func (m *Manager) initChannels() error {
 		}
 	}
 
+	if m.config.Channels.CustomAPI.Enabled {
+		logger.DebugC("channels", "Attempting to initialize CustomAPI channel")
+		customAPI, err := NewCustomAPIChannel(m.config.Channels.CustomAPI, m.bus)
+		if err != nil {
+			logger.ErrorCF("channels", "Failed to initialize CustomAPI channel", map[string]interface{}{
+				"error": err.Error(),
+			})
+		} else {
+			m.channels["custom_api"] = customAPI
+			logger.InfoC("channels", "CustomAPI channel enabled successfully")
+		}
+	}
+
 	logger.InfoCF("channels", "Channel initialization completed", map[string]interface{}{
 		"enabled_channels": len(m.channels),
 	})

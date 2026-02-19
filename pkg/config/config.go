@@ -152,16 +152,25 @@ type AgentDefaults struct {
 }
 
 type ChannelsConfig struct {
-	WhatsApp WhatsAppConfig `json:"whatsapp"`
-	Telegram TelegramConfig `json:"telegram"`
-	Feishu   FeishuConfig   `json:"feishu"`
-	Discord  DiscordConfig  `json:"discord"`
-	MaixCam  MaixCamConfig  `json:"maixcam"`
-	QQ       QQConfig       `json:"qq"`
-	DingTalk DingTalkConfig `json:"dingtalk"`
-	Slack    SlackConfig    `json:"slack"`
-	LINE     LINEConfig     `json:"line"`
-	OneBot   OneBotConfig   `json:"onebot"`
+	WhatsApp  WhatsAppConfig  `json:"whatsapp"`
+	Telegram  TelegramConfig  `json:"telegram"`
+	Feishu    FeishuConfig    `json:"feishu"`
+	Discord   DiscordConfig   `json:"discord"`
+	MaixCam   MaixCamConfig   `json:"maixcam"`
+	QQ        QQConfig        `json:"qq"`
+	DingTalk  DingTalkConfig  `json:"dingtalk"`
+	Slack     SlackConfig     `json:"slack"`
+	LINE      LINEConfig      `json:"line"`
+	OneBot    OneBotConfig    `json:"onebot"`
+	CustomAPI CustomAPIConfig `json:"custom_api"`
+}
+
+type CustomAPIConfig struct {
+	Enabled    bool                `json:"enabled" env:"PICOCLAW_CHANNELS_CUSTOM_API_ENABLED"`
+	Token      string              `json:"token" env:"PICOCLAW_CHANNELS_CUSTOM_API_TOKEN"`
+	Port       int                 `json:"port" env:"PICOCLAW_CHANNELS_CUSTOM_API_PORT"`
+	WebhookURL string              `json:"webhook_url" env:"PICOCLAW_CHANNELS_CUSTOM_API_WEBHOOK_URL"`
+	AllowFrom  FlexibleStringSlice `json:"allow_from" env:"PICOCLAW_CHANNELS_CUSTOM_API_ALLOW_FROM"`
 }
 
 type WhatsAppConfig struct {
@@ -397,6 +406,13 @@ func DefaultConfig() *Config {
 				ReconnectInterval:  5,
 				GroupTriggerPrefix: []string{},
 				AllowFrom:          FlexibleStringSlice{},
+			},
+			CustomAPI: CustomAPIConfig{
+				Enabled:    false,
+				Token:      "",
+				Port:       8080,
+				WebhookURL: "",
+				AllowFrom:  FlexibleStringSlice{},
 			},
 		},
 		Providers: ProvidersConfig{
